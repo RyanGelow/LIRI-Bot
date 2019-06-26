@@ -11,15 +11,7 @@ var nodeArgs = process.argv;
 
 const fillInPlus = nodeArgs.slice(3).join("+");
 const fillInSpace = nodeArgs.slice(3).join(" ");
-    // let topic = "";
-    // for (var i = 3; i < nodeArgs.length; i++) {
-    //     if (i > 3 && i < nodeArgs.length) {
-    //         topic = topic + " " + nodeArgs[i];
-    //     } else {
-    //         topic += nodeArgs[i];
-    //     }
-    // }
-    // return topic;
+
 
 const liri = function() {
     if(process.argv[3] === ``){
@@ -31,7 +23,7 @@ const liri = function() {
     }if(process.argv[2] === `spotify-this-song`) {
         spotifyThisSong();
     }if(process.argv[2] === `do-what-it-says`) {
-        // doWhatThisSays();
+        doWhatItSays();
     }
 }
 // Called with "movie-this"
@@ -118,14 +110,24 @@ const concertThis = function() {
 const spotifyThisSong = function() {
     // First command variable
     var song = fillInSpace;
-    spotify.search({ type: 'track', query: song }, function(err, data) {
+    spotify.search({ type: "track", query: song }, function(err, data) {
         if (err) {
-          return console.log('Error occurred: ' + err);
+            return console.log('Error occurred: ' + err);
         }
-       
-      console.log(data[0]); 
-      });
-
+        for(let i = 2; i < 7; i++) {
+            console.log("------------------------------");   
+            console.log("Song Name: " + data.tracks.items[i].name);
+            console.log("Artist: " + data.tracks.items[i].album.artists[0].name);
+            console.log("Album: " + data.tracks.items[i].album.name);
+            console.log("Song Preview Link: " + data.tracks.items[i].external_urls.spotify);
+        }
+        console.log("------------------------------");   
+    });
 }
 
+// Called with "do-what-it-says"
+const doWhatItSays = function() {
+    // First command variable
+    console.log('What do you want?');
+}
 liri();
