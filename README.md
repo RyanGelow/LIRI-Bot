@@ -31,4 +31,22 @@
     * node liri.js spotify-this-song shake it off
     * node liri.js spotify-this-song Enter Sandman
 
-    
+4. Here are a few photo examples of the liri node app:
+    * ![Movie](./images/movie_darby.png)
+    * ![Song](./images/song_the_best.png)
+    * ![Artist](./images/concert_spoon.png)
+
+5. Link to app: https://ryangelow.github.io/liri-node-app/
+
+6. Technologies used:
+    * [Node-Spotify-API](https://www.npmjs.com/package/node-spotify-api)
+    * [Axios](https://www.npmjs.com/package/axios)
+    * Using Axios:
+        * [OMDB API](http://www.omdbapi.com)   
+        * [Bands In Town API](http://www.artists.bandsintown.com/bandsintown-api)
+   * [Moment](https://www.npmjs.com/package/moment)
+   * [DotEnv](https://www.npmjs.com/package/dotenv)
+   * [File-System](https://www.npmjs.com/package/file-system) 
+7. List of key individuals:
+    * Lead-Developer: Ryan Gelow
+    * Assistance: Kit Te
