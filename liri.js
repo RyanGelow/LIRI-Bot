@@ -2,34 +2,38 @@ require("dotenv").config();
 var keys = require("./keys")
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
-// Grab the axios package...
 var axios = require("axios");
-// Grab the axios package...
 var moment = require('moment');
+var fs = require("fs");
+
 // Setup process.argv variable
-var nodeArgs = process.argv;
+// var nodeArgs = process.argv;
 
-const fillInPlus = nodeArgs.slice(3).join("+");
-const fillInSpace = nodeArgs.slice(3).join(" ");
+// let fillInPlus = nodeArgs.slice(3).join("+");
+// let fillInSpace = nodeArgs.slice(3).join(" ");
 
 
-const liri = function() {
-    if(process.argv[3] === ``){
-        console.log("Please enter a item to be searched");
-    }if(process.argv[2] === `movie-this`) {
-        movieThis();
+const liri = function(value) {
+    // if(process.argv[3] === ``){
+    //     console.log("Please enter a item to be searched");
+    // }
+    if(process.argv[2] === `movie-this`) {
+        movieThis(value)
     }if(process.argv[2] === `concert-this`) {
-        concertThis();
+        concertThis(value);
     }if(process.argv[2] === `spotify-this-song`) {
-        spotifyThisSong();
+        spotifyThisSong(value);
     }if(process.argv[2] === `do-what-it-says`) {
         doWhatItSays();
     }
 }
 // Called with "movie-this"
-const movieThis = function() {
+const movieThis = function(movieName) {
+    if(!movieName) {
+        movieName = `Mr. Nobody`;
+    }
     // First command variable
-    var movieName = fillInPlus;
+    // var movieName = fillInPlus;
     // Then run a request with axios to the OMDB API with the movie specified
     var queryUrl = `http://www.omdbapi.com/?t=${movieName}&apikey=trilogy`;
     axios.get(queryUrl)
@@ -57,9 +61,12 @@ const movieThis = function() {
 }
   
 // Called with "concert-this"
-const concertThis = function() {
+const concertThis = function(artist) {
+    if(!artist) {
+        artist = `Goo Goo Dolls`;
+    }
     // First command variable
-    var artist = fillInPlus;
+    // var artist = fillInPlus;
     // Run the axios.get function to take in a URL and returns a promise (just like $.ajax)
     axios.get(`https://rest.bandsintown.com/artists/${artist}?app_id=codingbootcamp`)
     .then(function(response) {
@@ -107,14 +114,17 @@ const concertThis = function() {
 }
 
 // Called with "spotify-this-song"
-const spotifyThisSong = function() {
+const spotifyThisSong = function(song) {
+    if(!song) {
+        song = `The Sign`;
+    }
     // First command variable
-    var song = fillInSpace;
+    // let song = fillInSpace;
     spotify.search({ type: "track", query: song }, function(err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-        for(let i = 2; i < 7; i++) {
+        for(let i = 0; i < 7; i++) {
             console.log("------------------------------");   
             console.log("Song Name: " + data.tracks.items[i].name);
             console.log("Artist: " + data.tracks.items[i].album.artists[0].name);
@@ -127,7 +137,30 @@ const spotifyThisSong = function() {
 
 // Called with "do-what-it-says"
 const doWhatItSays = function() {
-    // First command variable
-    console.log('What do you want?');
+    // First command variable    
+    fs.readFile("random.txt", "utf8", function(error, data) {
+        if (error) {
+          return console.log(error);
+        }
+        // Split it by comma 
+        var dataArr = data.split(",");
+
+        // liri( dataArr[0], dataArr.slice(1).join(" ") )
+        if(dataArr[0] === 'movie-this') {
+            movieName = dataArr[1];
+            movieThis(movieName);
+        };
+        if(dataArr[0] === 'concert-this') {
+            artist = dataArr[1];
+            spotifyThisSong(artist);
+        };
+        if(dataArr[0] === 'spotify-this-song') {
+            song = dataArr[1];
+            spotifyThisSong(song);
+        };
+    });
 }
-liri();
+
+const cmd = process.argv.slice(3).join(" ")
+
+liri(cmd);
